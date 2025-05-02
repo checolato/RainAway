@@ -12,8 +12,15 @@ if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) 
     recognition.interimResults = true;
     recognition.continuous = true;
 
+    recognition.onstart = function() {
+        console.log('Speech recognition started');
+        textDisplay.textContent = 'Listening...';
+    };
+
     recognition.onresult = function(event) {
+        console.log('Speech recognition result:', event);
         const transcript = event.results[event.results.length - 1][0].transcript;
+        console.log('Transcript:', transcript);
         textDisplay.textContent = transcript;
     };
 
@@ -35,6 +42,7 @@ if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) 
     // Request microphone permission and start recognition
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(() => {
+            console.log('Microphone permission granted');
             try {
                 recognition.start();
             } catch (error) {
