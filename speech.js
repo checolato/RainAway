@@ -31,11 +31,22 @@ if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) 
 
     recognition.onresult = function(event) {
         console.log('Speech recognition result:', event);
+        
+        // Get the current result
         const results = event.results;
-        const lastResult = results[results.length - 1];
-        const transcript = lastResult[0].transcript;
-        console.log('Transcript:', transcript);
-        textDisplay.textContent = transcript;
+        const currentResult = results[results.length - 1];
+        
+        // Check if the result is final
+        if (currentResult.isFinal) {
+            const transcript = currentResult[0].transcript;
+            console.log('Final transcript:', transcript);
+            textDisplay.textContent = transcript;
+        } else {
+            // Show interim results
+            const interimTranscript = currentResult[0].transcript;
+            console.log('Interim transcript:', interimTranscript);
+            textDisplay.textContent = interimTranscript;
+        }
     };
 
     recognition.onerror = function(event) {
